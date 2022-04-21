@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 interface ContainerProps {
@@ -14,20 +15,18 @@ const Container = styled.div<ContainerProps>`
 `
 
 interface CircleProps {
-    //interface 내부에 설정한 속성들은 필수(required)로써, 선언해주지 않으면 오류가 생긴다.
     bgColor: string;
-    //?: 를 통해 선택적으로 사용할 수 있도록 넣어줄 수 있다.
-    //borderColor: string | undefined 도 가능하지만 ?를 사용하는 것이 더 편하고 명확하다.
     borderColor?: string;
     text?: string;
 }
 
-function Circle({ bgColor, borderColor, text="default text" }: CircleProps) {
-    //CircleProps에서 borderColor를 선택적으로 받지만 Container에서는 필수적으로 해당 값을 받는다고 설정했기 때문에
-    //기본값을 정해주어야 한다. 기본값은 (?? 해당 값)의 형태로 집어넣을 수 있다. undefined의 경우 기본값이 들어간다.
-    return <Container bgColor={bgColor} borderColor={borderColor ?? bgColor}>
-        {text}
-    </Container>
+function Circle({ bgColor, borderColor}: CircleProps) {
+    //타입스크립트에서는 useState의 초기값을 가지고 타입을 추측하여 해당 타입으로만 받을 수 있도록 set을 조정.
+    const [ counter, setCounter ] = useState(1)
+
+    // state가 단일 타입이 아닌 다른 타입도 받을 수 있게 하려면 아래와 같이 대괄호 안에 타입들을 정리해주면 된다.
+    // const [value, setValue] = useState<number|string>(0); // value에는 string과 number 모두 들어갈 수 있다.
+    return <Container bgColor={bgColor} borderColor={borderColor ?? bgColor} />
 }
 
 export default Circle;
